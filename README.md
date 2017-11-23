@@ -83,10 +83,10 @@ Though question right? Luckily that is exactly the question Linear Regression wo
 
 ## The Answer
 
-For this tutorial you would need to install:
+For this tutorial you will need:
 
-* Couchbase Server 4+
-* Spark 2.2
+* [Couchbase Server 5](https://www.couchbase.com/downloads)
+* [Spark 2.2](https://spark.apache.org/releases/spark-release-2-2-0.html)
 * [SBT](http://www.scala-sbt.org/download.html) (as we are running using scala)
 
 With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket called
@@ -96,12 +96,14 @@ With your Couchbase Server running, go to the administrative portal at http://12
 
 
 Now lets clone our tutorial code:
-`git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git`
+`git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git
 
 In root folder there is a file called **house_prices_train_data.zip**, it is our dataset which I borrowed from an old machine 
 learning course on Coursera. Please unzip it and then run the following command:
 
-`./cbimport json -c couchbase://127.0.0.1 -u YOUR_USER -p YOUR_PASSWORD -b houses_prices -d <PATH_TO_UNZIPED_FILE>/house_prices_train_data -f list -g key::%id% -t 4`
+```
+./cbimport json -c couchbase://127.0.0.1 -u YOUR_USER -p YOUR_PASSWORD -b houses_prices -d <PATH_TO_UNZIPED_FILE>/house_prices_train_data -f list -g key::%id% -t 4`
+```
 
 **TIP:** If you are not familiar with **cbimport** please [check this tutorial](https://developer.couchbase.com/documentation/server/current/tools/cbimport.html)
 
@@ -119,7 +121,59 @@ CREATE PRIMARY INDEX ON `houses_prices`
 ![Index creation](imgs/index_creation.png "Creating indexes for houses_prices bucket")
 
 
+Now that our environmemt is ready, it is time to code!. 
+In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spark-mllib-sample/blob/master/src/main/scala/LinearRegressionExample.scala) class we start by creating the Spark context with our bucket credentials:
 
+```scala
+
+    val spark = SparkSession
+      .builder()
+      .appName("SparkSQLExample")
+      .master("local[*]") // use the JVM as the master, great for testing
+      .config("spark.couchbase.nodes", "127.0.0.1") // connect to couchbase on localhost
+      .config("spark.couchbase.bucket.houses_prices", "") // open the houses_prices bucket with empty password
+      .config("com.couchbase.username", "YOUR_USER")
+      .config("com.couchbase.password", "YOUR_PASSWORD")
+      .getOrCreate()
+
+```
+
+and then we load all the data from the database.
+
+```scala
+val houses = spark.read.couchbase()
+```
+
+As spark use a lazy approach, the data is not loaded until it is really needed. Here you can clearly see the beauty of the **Couchbase Connector**
+we just converted a JSON Document into a Spark Dataframe with zero effort. In other databases for example, you would be required to export the data to a csv file with some
+specific formats, copy it to your machine, load it and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
+
+In the real world you would need to filter the data instead of just grabbing all data, hopefully our connector is there for you, and you can even
+run some N1QL queries with it:
+
+```scala
+//loading documents by its type
+val airlines = spark.read.couchbase(EqualTo("type", "airline"))
+
+//loading data using N1QL
+// This query groups airports by country and counts them.
+    val query = N1qlQuery.simple("" +
+      "select country, count(*) as count " +
+      "from `travel-sample` " +
+      "where type = 'airport' " +
+      "group by country " +
+      "order by count desc")
+
+    val schema = StructType(
+        StructField("count", IntegerType) ::
+        StructField("country", StringType) :: Nil
+    )
+
+    val rdd = spark.sparkContext.couchbaseQuery(query).map(r => Row(r.value.getInt("count"), r.value.getString("country")))
+    spark.createDataFrame(rdd, schema).show()
+
+```
+**TIP:** You can check all the  **cbimport** please [check this tutorial](https://developer.couchbase.com/documentation/server/current/tools/cbimport.html)
 
 
 
