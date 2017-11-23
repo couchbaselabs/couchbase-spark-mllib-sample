@@ -5,7 +5,7 @@ Zero Effort Machine Learning with Couchbase and Spark MLlib
 In the last few years we have witnessed the rise of Machine Learning, a 50+ years old 	
 technique that has finally reached the masses. Surprisingly a lot of companies are still not doing anything 
 in this field, in part I believe due to the lack of knowledge of how it fits in their business and also because 
-this topic still seems to be lirrle cloudy in most of the programmers heads, that is why I would like
+for most of the developers it still sounds like black magic, that is why I would like
 show you today how you can start with machine learning with almost zero effort.
 
 In the most basic level of machine learning we have something called Linear Regression which is roughly an algorithm 
@@ -76,7 +76,7 @@ Now imagine you just joined the company and you have to sell the following house
   "sqft_lot15": 7316
  }
 ```
-For how much would you sell it?
+**For how much would you sell it?**
 
 Though question right? Luckily that is exactly the question Linear Regression would help you to answer.
 
@@ -108,6 +108,7 @@ learning course on Coursera. Please unzip it and then run the following command:
 
 If your command ran successfully, you should notice that your **houses_prices** bucket has been populated:
 
+![Index creation](imgs/filled_bucket.png "The houses_prices bucket has been populated.")
 
 For the sake of letting you explore this data let's quickly create an index for it, run the following command in the query editor:
 
