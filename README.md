@@ -2,10 +2,10 @@ Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
 
-In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old 	
-technique that has finally reached the masses, surprisingly a lot of companies are still not doing anything 
-in this field, in part I believe due to the lack of knowledge of how it fits in their business and also because for
-most of the developers, it still sounds like black magic, that is why I would like show you today how you can start with machine learning with almost zero effort.
+In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old technique that has finally reached 
+the masses, surprisingly a lot of companies are still not doing anything in this field, in part I believe due to the lack 
+of knowledge of how it fits in their business and also because for most of the developers, it still sounds like black magic,
+that is why I would like show you today how you can start with machine learning with almost zero effort.
 
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
@@ -16,9 +16,10 @@ that tries to "explain" a number by giving weight to a set of features, let's se
 
 
 There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
-one related to house prices. Imagine we a running a real estate company in a particular region of 
-the country, as we are not a new company, we do have some data of which were the houses sold in the past and
-for how much, in this case, each row in our historical data will look like this:
+one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are 
+not a new company, we do have some data of which were the houses sold in the past and for how much. 
+
+In this case, each row in our historical data will look like this:
 
 ```javascript
   {
@@ -82,7 +83,7 @@ Though question, right? Luckily, that is exactly the question Linear Regression 
 
 ## The Answer - Predicting house prices with Linear Regression
 
-Before you go further, you will need to install the following items"
+Before you go further, you will need to install the following items:
 
 * [Couchbase Server 5](https://www.couchbase.com/downloads)
 * [Spark 2.2](https://spark.apache.org/releases/spark-release-2-2-0.html)
