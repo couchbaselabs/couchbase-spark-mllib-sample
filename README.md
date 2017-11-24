@@ -5,7 +5,7 @@ Zero Effort Machine Learning with Couchbase and Spark MLlib
 In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old 	
 technique that has finally reached the masses, surprisingly a lot of companies are still not doing anything 
 in this field, in part I believe due to the lack of knowledge of how it fits in their business and also because for
-most of the developers it still sounds like black magic, that is why I would like show you today how you can start with machine learning with almost zero effort.
+most of the developers, it still sounds like black magic, that is why I would like show you today how you can start with machine learning with almost zero effort.
 
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
