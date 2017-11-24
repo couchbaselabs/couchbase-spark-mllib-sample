@@ -339,7 +339,7 @@ And now we can finally predict the expected house price:
 Awesome, isn't it?
 
 For production purpose you should do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first and save the model
-instead of training it on the fly, but it's amazing what can be node with less than 100 lines of code!
+instead of training it on the fly, but it's amazing what can be done with less than 100 lines of code!
 
 If you have any questions, feel free to ask me.
 
