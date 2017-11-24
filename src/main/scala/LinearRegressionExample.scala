@@ -24,11 +24,12 @@ object LinearRegressionExample {
     //Loading data from the database, you could add some filters here or even write a N1QL query.
     //Please check https://github.com/couchbaselabs/couchbase-spark-samples for more info
     val houses = spark.read.couchbase()
+    houses.show(10)
 
     //handling categorical variables
     val df = transformCategoricalFeatures(houses)
 
-    df.show()
+    df.show(10)
 
     //just using almost all columns as features, no special feature engineering here
     val features = Array("sqft_living", "bedrooms",
