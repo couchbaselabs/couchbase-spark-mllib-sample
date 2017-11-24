@@ -324,6 +324,7 @@ The one that you should care here is called [RMSE - Root Mean Squared Error](htt
 average deviation of __what our model preditcs X the actual price sold__.
 >
 >RMSE: 147556.0841305963
+>
 >r2: 0.8362288980410875
 >
 On average we miss the actual price by $147556.0841305963, which is not bad at all considering we barely did any [feature engineering](https://en.wikipedia.org/wiki/Feature_engineering) or
