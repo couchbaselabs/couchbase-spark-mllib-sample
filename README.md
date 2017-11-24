@@ -2,13 +2,13 @@ Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
 
-In the last few years we have witnessed the rise of Machine Learning, a 50+ years old 	
-technique that has finally reached the masses. Surprisingly a lot of companies are still not doing anything 
-in this field, in part I believe due to the lack of knowledge of how it fits in their business and also because 
+In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old 	
+technique that has finally reached the masses, surprisingly a lot of companies are still not doing anything 
+in this field, in part I believe due to the lack of knowledge of how it fits in their business and also due to 
 for most of the developers it still sounds like black magic, that is why I would like
 show you today how you can start with machine learning with almost zero effort.
 
-In the most basic level of machine learning we have something called Linear Regression which is roughly an algorithm 
+On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
 
 * The price of a house could be explained by things like size, location, number of bedrooms and bathrooms;
@@ -16,10 +16,10 @@ that tries to "explain" a number by giving weight to a set of features, let's se
 * The time spent for a given task could be predicted by the number of subtasks, level of difficulty, worker experience, etc;
 
 
-There a plenty of use cases were Linear Regression (or other Regression types) can be used, but lets focus in the first
-one related to house prices. Imagine we a running a real state company in a particular region of 
+There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
+one related to house prices. Imagine we a running a real estate company in a particular region of 
 the country, as we are not a new company, we do have some data of which were the houses sold in the past and
-for how much, in this case each row in our historical data will look like this:
+for how much, in this case, each row in our historical data will look like this:
 
 ```javascript
   {
@@ -47,7 +47,7 @@ for how much, in this case each row in our historical data will look like this:
   }
 ```
 
-## The problem
+## The problem - How to price a house
 
 Now imagine you just joined the company and you have to sell the following house:
 
@@ -78,16 +78,18 @@ Now imagine you just joined the company and you have to sell the following house
 ```
 **For how much would you sell it?**
 
-Though question right? Luckily that is exactly the question Linear Regression would help you to answer.
+Though question, right? Luckily that is exactly the question Linear Regression would help you to answer.
 
 
-## The Answer
+## The Answer - Linear Regression using Spark MLlib
 
-For this tutorial you will need:
+Before you go further, you will need to install the following items"
 
 * [Couchbase Server 5](https://www.couchbase.com/downloads)
 * [Spark 2.2](https://spark.apache.org/releases/spark-release-2-2-0.html)
 * [SBT](http://www.scala-sbt.org/download.html) (as we are running using scala)
+
+### Loading the Dataset
 
 With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket called
 **houses_prices**
@@ -95,8 +97,10 @@ With your Couchbase Server running, go to the administrative portal at http://12
 ![bucket creation](imgs/bucket_creation.png "houses_prices bucket creation")
 
 
-Now lets clone our tutorial code:
-`git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git
+Now let's clone our tutorial code:
+```
+git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git
+```
 
 In root folder there is a file called **house_prices_train_data.zip**, it is our dataset which I borrowed from an old machine 
 learning course on Coursera. Please unzip it and then run the following command:
@@ -121,7 +125,9 @@ CREATE PRIMARY INDEX ON `houses_prices`
 ![Index creation](imgs/index_creation.png "Creating indexes for houses_prices bucket")
 
 
-Now that our environmemt is ready, it is time to code!. 
+### Time to Code!
+
+Now that our environment is ready, it is time to code!
 In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spark-mllib-sample/blob/master/src/main/scala/LinearRegressionExample.scala) class we start by creating the Spark context with our bucket credentials:
 
 ```scala
@@ -144,11 +150,12 @@ and then we load all the data from the database.
 val houses = spark.read.couchbase()
 ```
 
-As spark use a lazy approach, the data is not loaded until it is really needed. Here you can clearly see the beauty of the **Couchbase Connector**
-we just converted a JSON Document into a Spark Dataframe with zero effort. In other databases for example, you would be required to export the data to a csv file with some
-specific formats, copy it to your machine, load it and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
+As Spark use a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
 
-In the real world you would need to filter the data instead of just grabbing all data, hopefully our connector is there for you, and you can even
+In other databases for example, you would be required to export the data to a csv file with some specific formats, copy it to your machine, 
+load it and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
+
+In the real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even
 run some N1QL queries with it:
 
 ```scala
@@ -179,12 +186,12 @@ Our dataframe still looks exactly as what we had in our database:
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
-As you can see, we have 2 different types of data here, numbers such as **bathrooms** and **sqft_living** and 
+As you can see, we have 2 different types of data here, "plain numbers" such as **bathrooms** and **sqft_living** and 
 "categorical variables" such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple
-numbers, they have a much more deep meaning as they describing a property, in the zipcode case for example it represents the location of the house.
+numbers, they have a much more deep meaning as they describing a property, in the zipcode case for example, it represents the location of the house.
 
-Linear Regression does not like those kind of variables, so if we really want to use zipcode for example, as it seems to be a relevant one, we have to
-convert it to **dummy variables**, which is fairly simple processes:
+Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
+as it seems to be a relevant field to predict the price of a house , we have toconvert it to **dummy variables**, which is fairly simple processes:
 
 1. First we distinct the values of the target column. Ex: `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
 2. For each result we convert it to a columns. Ex: zipcode_98002, zipcode_98188, zipcode_98059
@@ -206,7 +213,7 @@ This is exactly what we are doing in the line bellow:
 val df = transformCategoricalFeatures(houses)
 ```
 
-and as you can see, spark has some utilities to do this work for you:
+Converting categorical variables is a very common procedure and Spark already has some utilities to do this work for you:
 
 ```scala
 def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
@@ -231,6 +238,8 @@ def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
     encoder.transform(indexed)
   }
 ```
+
+
 
 
 

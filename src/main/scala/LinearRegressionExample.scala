@@ -28,7 +28,6 @@ object LinearRegressionExample {
 
     //handling categorical variables
     val df = transformCategoricalFeatures(houses)
-
     df.show(10)
 
     //just using almost all columns as features, no special feature engineering here
