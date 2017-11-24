@@ -173,7 +173,10 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
     spark.createDataFrame(rdd, schema).show()
 
 ```
-**TIP:** You can check all the  **cbimport** please [check this tutorial](https://developer.couchbase.com/documentation/server/current/tools/cbimport.html)
+**TIP:** There are other a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
+
+
+
 
 
 
