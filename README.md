@@ -238,7 +238,40 @@ def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
     encoder.transform(indexed)
   }
 ```
+**NOTE:**The final dataframe will not look exactly like the example shown above, the reason is that it is optimized to avoid the [The Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix ) 
 
+
+Now we can select the fields we would like to use grouping them in a vector called **features** and renaming the column **price** to **label**:
+
+```scala
+//just using almost all columns as features, no special feature engineering here
+    val features = Array("sqft_living", "bedrooms",
+      "gradeVec", "waterfront",
+      "bathrooms", "view",
+      "conditionVec", "sqft_above",
+      "sqft_basement", "zipcode",
+      "sqft_lot", "floors",
+      "yr_built", "zipcodeVec", "yr_renovatedVec")
+
+    val assembler = new VectorAssembler()
+      .setInputCols(features)
+      .setOutputCol("features")
+
+    //the Linear Regression implementation expect a feature called "label"
+    val renamedDF = assembler.transform(df.withColumnRenamed("price", "label"))
+```
+
+You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature
+to see how the algorithm has a much worse performance.
+
+Finally we will only use to train our machine learning algorithm houses which the price is not null, as the whole goal is to make our
+Linear Regression "learn" how to predict the price of a house according to its features.
+
+```scala
+    val data = renamedDF.select("label", "features").filter("price is not null")
+```    
+ 
+ 
 
 
 

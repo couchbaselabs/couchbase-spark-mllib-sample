@@ -35,9 +35,9 @@ object LinearRegressionExample {
       "gradeVec", "waterfront",
       "bathrooms", "view",
       "conditionVec", "sqft_above",
-      "sqft_basement", "zipcode",
+      "sqft_basement", "zipcodeVec",
       "sqft_lot", "floors",
-      "yr_built", "zipcodeVec", "yr_renovatedVec")
+      "yr_built", "yr_renovatedVec")
 
     val assembler = new VectorAssembler()
       .setInputCols(features)
