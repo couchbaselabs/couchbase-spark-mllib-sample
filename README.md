@@ -190,9 +190,9 @@ houses.show(10)
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
-As you can see, we have 2 different types of data here, "plain numbers" such as **bathrooms** and **sqft_living** and 
-"categorical variables" such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple
-numbers, they have a much more deep meaning as they describing a property, in the zipcode case for example, it represents the location of the house.
+There are 2 different types of data here, "plain numbers" such as **bathrooms** and **sqft_living** and "categorical variables" 
+such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple numbers, they have a much more 
+deep meaning as they describing a property, in the zipcode case for example, it represents the location of the house.
 
 Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
 as it seems to be a relevant field to predict the price of a house , we have to convert it to **dummy variables**, which is fairly simple processes:
