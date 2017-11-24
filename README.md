@@ -128,6 +128,7 @@ CREATE PRIMARY INDEX ON `houses_prices`
 ### Time to Code!
 
 Now our environment is ready and it is time to code!
+
 In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spark-mllib-sample/blob/master/src/main/scala/LinearRegressionExample.scala) class we start by creating the Spark context with our bucket credentials:
 
 ```scala
@@ -144,7 +145,7 @@ In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spar
 
 ```
 
-and then we load all the data from the database.
+and then we load all the data from the database:
 
 ```scala
 val houses = spark.read.couchbase()
@@ -153,9 +154,9 @@ val houses = spark.read.couchbase()
 As Spark uses a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
 
 In other databases for example, you would be required to export the data to a csv file with some specific formats, copy it to your machine, 
-load it and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
+load and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
 
-In the real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even
+In a real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even
 run some N1QL queries with it:
 
 ```scala
@@ -183,6 +184,9 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
 **TIP:** There are a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
 Our dataframe still looks exactly as what we had in our database:
+```scala
+houses.show(10)
+```
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
