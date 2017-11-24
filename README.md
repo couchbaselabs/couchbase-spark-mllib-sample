@@ -192,26 +192,12 @@ convert it to **dummy variables**, which is fairly simple processes:
 
 Ex:
 
->+---------------+-------+
->|        META_ID|zipcode|
->+---------------+-------+
->|   key::1000001|  98002|  
->|   key::1000102|  98002|
->|key::1003000175|  98188|
->| key::100300500|  98059|
->+---------------+-------+
+>![Data Before Transformation](imgs/data_before_transformation.png "")
+>
 >
 >The table above will be transformed to:
 >
->
->+---------------+-------+-------------+-------------+-------------+           
->|        META_ID|zipcode|zipcode_98002|zipcode_98188|zipcode_98059|            
->+---------------+-------+-------------+-------------+-------------+           
->|   key::1000001|  98002|            1|            0|            0|           
->|   key::1000102|  98002|            1|            0|            0|           
->|key::1003000175|  98188|            0|            1|            0|           
->| key::100300500|  98059|            0|            0|            1|           
->+---------------+-------+-------------+-------------+-------------+           
+>![Data Before Transformation](imgs/data_after_transformation.png "")
 >
 
 This is exactly what we are doing in the line bellow:
