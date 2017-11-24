@@ -81,7 +81,7 @@ Now imagine you just joined the company and you have to sell the following house
 Though question, right? Luckily that is exactly the question Linear Regression would help you to answer.
 
 
-## The Answer - Linear Regression using Spark MLlib
+## The Answer - Predicting house prices with Linear Regression
 
 Before you go further, you will need to install the following items"
 
@@ -150,7 +150,7 @@ and then we load all the data from the database.
 val houses = spark.read.couchbase()
 ```
 
-As Spark use a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
+As Spark uses a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
 
 In other databases for example, you would be required to export the data to a csv file with some specific formats, copy it to your machine, 
 load it and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
@@ -271,7 +271,72 @@ Linear Regression "learn" how to predict the price of a house according to its f
     val data = renamedDF.select("label", "features").filter("price is not null")
 ```    
  
+Here is where the magic happens, we split our data in training (80%) and test (20%), but for the purpose of this article let's
+ignore the test data. 
+Then we create our LinearRegression instance and **fit** our data into it.
  
+```scala
+
+//let's split our data in test and training (a common thing during model selection)
+    val splits = data.randomSplit(Array(0.8, 0.2), seed = 1L)
+    val trainingData = splits(0).cache()
+    //let's ignore the test data for now as we are not doing model selection
+    val testData = splits(1)
+
+    val lr = new LinearRegression()
+      .setMaxIter(1000)
+      .setStandardization(true)
+      .setRegParam(0.1)
+      .setElasticNetParam(0.8)
+
+    val lrModel = lr.fit(trainingData)
+
+```
+
+The **lrModel** variable is already a trained model who is able to predict house prices!
+
+Before we start predicting things, let's just check some coefficients of our trained model:
+
+```scala
+
+    println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
+    val trainingSummary = lrModel.summary
+    println(s"numIterations: ${trainingSummary.totalIterations}")
+    println(s"objectiveHistory: [${trainingSummary.objectiveHistory.mkString(",")}]")
+    trainingSummary.residuals.show()
+    println(s"RMSE: ${trainingSummary.rootMeanSquaredError}")
+    println(s"r2: ${trainingSummary.r2}")
+
+```
+
+The one that you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the
+average deviation of __what our model preditcs X the actual price sold__.
+>
+>RMSE: 147556.0841305963
+>r2: 0.8362288980410875
+>
+On average we miss the actual price by $147556.0841305963, which is not bad at all considering we barely did any [feature engineering](https://en.wikipedia.org/wiki/Feature_engineering) or
+removed any outliers (some houses might have inexplicable high or low prices, and it might mess up with your Linear Regression)
+
+There is only one house with a price missing in this dataset, exactly the one that we pointed in the beginning:
+```scala
+
+    val missingPriceData = renamedDF.select("features")
+      .filter("price is null")
+
+    missingPriceData.show()
+```
+
+And now we can finally predict thw house price:
+
+```scala
+    //printing out the predicted values
+    val predictedValues = lrModel.transform(missingPriceData)
+    predictedValues.select("prediction").show()
+
+```
+![Predicted House Price](imgs/predicted_price.png "Predicted House Price")
+Awesome, isn't?
 
 
 
