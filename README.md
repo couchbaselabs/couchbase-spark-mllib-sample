@@ -4,9 +4,8 @@ Zero Effort Machine Learning with Couchbase and Spark MLlib
 
 In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old 	
 technique that has finally reached the masses, surprisingly a lot of companies are still not doing anything 
-in this field, in part I believe due to the lack of knowledge of how it fits in their business and also due to 
-for most of the developers it still sounds like black magic, that is why I would like
-show you today how you can start with machine learning with almost zero effort.
+in this field, in part I believe due to the lack of knowledge of how it fits in their business and also because for
+most of the developers it still sounds like black magic, that is why I would like show you today how you can start with machine learning with almost zero effort.
 
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
@@ -78,7 +77,7 @@ Now imagine you just joined the company and you have to sell the following house
 ```
 **For how much would you sell it?**
 
-Though question, right? Luckily that is exactly the question Linear Regression would help you to answer.
+Though question, right? Luckily, that is exactly the question Linear Regression would help you to answer.
 
 
 ## The Answer - Predicting house prices with Linear Regression
@@ -191,7 +190,7 @@ As you can see, we have 2 different types of data here, "plain numbers" such as 
 numbers, they have a much more deep meaning as they describing a property, in the zipcode case for example, it represents the location of the house.
 
 Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
-as it seems to be a relevant field to predict the price of a house , we have toconvert it to **dummy variables**, which is fairly simple processes:
+as it seems to be a relevant field to predict the price of a house , we have to convert it to **dummy variables**, which is fairly simple processes:
 
 1. First we distinct the values of the target column. Ex: `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
 2. For each result we convert it to a columns. Ex: zipcode_98002, zipcode_98188, zipcode_98059
@@ -264,7 +263,7 @@ Now we can select the fields we would like to use grouping them in a vector call
 You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature
 to see how the algorithm has a much worse performance.
 
-Finally we will only use to train our machine learning algorithm houses which the price is not null, as the whole goal is to make our
+Finally we will only use houses which the price is not null to train our machine learning algorithm, as the whole goal is to make our
 Linear Regression "learn" how to predict the price of a house according to its features.
 
 ```scala
@@ -337,7 +336,7 @@ And now we can finally predict the expected house price:
 ```
 ![Predicted House Price](imgs/predicted_price.png "Predicted House Price")
 
-Awesome, isn't?
+Awesome, isn't it?
 
 For production purpose you should do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first and save the model
 instead of training it on the fly, but it's amazing what can be node with less than 100 lines of code!
