@@ -127,7 +127,7 @@ CREATE PRIMARY INDEX ON `houses_prices`
 
 ### Time to Code!
 
-Now that our environment is ready, it is time to code!
+Now our environment is ready and it is time to code!
 In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spark-mllib-sample/blob/master/src/main/scala/LinearRegressionExample.scala) class we start by creating the Spark context with our bucket credentials:
 
 ```scala
