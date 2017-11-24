@@ -336,6 +336,7 @@ And now we can finally predict thw house price:
 
 ```
 ![Predicted House Price](imgs/predicted_price.png "Predicted House Price")
+
 Awesome, isn't?
 
 For production purpose you should do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first and save the model
