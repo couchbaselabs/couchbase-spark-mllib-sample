@@ -175,36 +175,76 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
 ```
 **TIP:** There are a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
-At this point, as you might guess, our dataframe still looks exactly as what we had in our database:
+As you might guess, our dataframe still looks exactly as what we had in our database:
 
-+---------------+---------+--------+---------+---------------+------+-----+----------+-------+--------+------+----------+-------------+-----------+-------------+--------+----------+----+----------+--------+------------+-------+
-|        META_ID|bathrooms|bedrooms|condition|           date|floors|grade|        id|    lat|    long| price|sqft_above|sqft_basement|sqft_living|sqft_living15|sqft_lot|sqft_lot15|view|waterfront|yr_built|yr_renovated|zipcode|
-+---------------+---------+--------+---------+---------------+------+-----+----------+-------+--------+------+----------+-------------+-----------+-------------+--------+----------+----+----------+--------+------------+-------+
-|   key::1000001|      3.0|       6|        3|20150422T000000|   2.0|    7|   1000001|47.3262|-122.214|  null|      2400|            0|       2400|         2060|    9373|      7316|   0|         0|    1991|           0|  98002|
-|   key::1000102|      3.0|       6|        3|20150422T000000|   2.0|    7|   1000102|47.3262|-122.214|300000|      2400|            0|       2400|         2060|    9373|      7316|   0|         0|    1991|           0|  98002|
-|key::1001200035|      1.0|       3|        3|20150306T000000|   1.5|    7|1001200035|47.4323|-122.292|272450|      1350|            0|       1350|         1310|    7973|      7491|   0|         0|    1954|           0|  98188|
-|key::1001200050|      1.5|       4|        5|20140923T000000|   1.5|    7|1001200050| 47.433|-122.292|259000|      1260|            0|       1260|         1300|    7248|      7732|   0|         0|    1955|           0|  98188|
-|key::1003000175|      1.0|       3|        3|20141222T000000|   1.0|    7|1003000175|47.4356| -122.29|221000|       980|            0|        980|          980|    7606|      8125|   0|         0|    1954|           0|  98188|
-| key::100300280|     2.25|       3|        3|20141020T000000|   2.0|    7| 100300280|47.4867|-122.152|355000|      1430|            0|       1430|         1639|    4777|      3854|   0|         0|    2010|           0|  98059|
-| key::100300500|      2.5|       3|        3|20141121T000000|   2.0|    7| 100300500|47.4874|-122.152|333000|      1520|            0|       1520|         1820|    3041|      3229|   0|         0|    2009|           0|  98059|
-| key::100300530|      2.5|       3|        3|20140925T000000|   2.0|    7| 100300530|47.4876|-122.153|330000|      1520|            0|       1520|         1820|    3003|      3030|   0|         0|    2009|           0|  98059|
-|key::1003400155|      1.0|       3|        3|20140811T000000|   1.0|    7|1003400155|47.4374|-122.285|233000|      1100|            0|       1100|         1300|    7657|      8000|   0|         0|    1955|           0|  98188|
-|key::1003400245|      1.0|       3|        3|20141201T000000|   1.0|    7|1003400245|47.4362|-122.286|179950|      1130|            0|       1130|         1320|    9907|      9907|   0|         0|    1954|           0|  98188|
-+---------------+---------+--------+---------+---------------+------+-----+----------+-------+--------+------+----------+-------------+-----------+-------------+--------+----------+----+----------+--------+------------+-------+
+![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
+As you can see, we have 2 different types of data here, numbers such as **bathrooms** and **sqft_living** and 
+"categorical variables" such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple
+numbers, they have a much more deep meaning as they describing a property, in the zipcode case for example it represents the location of the house.
 
+Linear Regression does not like those kind of variables, so if we really want to use zipcode for example, as it seems to be a relevant one, we have to
+convert it to **dummy variables**, which is fairly simple processes:
 
+1. First we distinct the values of the target column. Ex: `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
+2. For each result we convert it to a columns. Ex: zipcode_98002, zipcode_98188, zipcode_98059
+3. Finally we update those new columns with 1s and 0s according to the value of the zipcode content:
 
+Ex:
 
+>+---------------+-------+
+>|        META_ID|zipcode|
+>+---------------+-------+
+>|   key::1000001|  98002|  
+>|   key::1000102|  98002|
+>|key::1003000175|  98188|
+>| key::100300500|  98059|
+>+---------------+-------+
+>
+>The table above will be transformed to:
+>
+>
+>+---------------+-------+-------------+-------------+-------------+           
+>|        META_ID|zipcode|zipcode_98002|zipcode_98188|zipcode_98059|            
+>+---------------+-------+-------------+-------------+-------------+           
+>|   key::1000001|  98002|            1|            0|            0|           
+>|   key::1000102|  98002|            1|            0|            0|           
+>|key::1003000175|  98188|            0|            1|            0|           
+>| key::100300500|  98059|            0|            0|            1|           
+>+---------------+-------+-------------+-------------+-------------+           
+>
 
+This is exactly what we are doing in the line bellow:
 
+```scala
+val df = transformCategoricalFeatures(houses)
+```
 
+and as you can see, spark has some utilities to do this work for you:
 
- 
+```scala
+def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
+    val df1 = encodeFeature("zipcode", "zipcodeVec", dataset)
+    val df2 = encodeFeature("yr_renovated", "yr_renovatedVec", df1)
+    val df3 = encodeFeature("condition", "conditionVec", df2)
+    encodeFeature("grade", "gradeVec", df3)
+  }
 
+  def encodeFeature(featureName: String, outputName: String, dataset: Dataset[_]): DataFrame = {
+    val indexer = new StringIndexer()
+      .setInputCol(featureName)
+      .setOutputCol(featureName + "Index")
+      .fit(dataset)
 
+    val indexed = indexer.transform(dataset)
 
+    val encoder = new OneHotEncoder()
+      .setInputCol(featureName + "Index")
+      .setOutputCol(outputName)
 
+    encoder.transform(indexed)
+  }
+```
 
 
 
