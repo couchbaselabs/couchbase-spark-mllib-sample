@@ -275,8 +275,8 @@ Now we can select the fields we would like to use grouping them in a vector call
 You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature
 to see how the algorithm has a much worse performance.
 
-Finally we will only use houses which the price is not null to train our machine learning algorithm, as the whole goal is to make our
-Linear Regression "learn" how to predict the price of a house according to its features.
+Finally we will only use houses in which the price is not null to train our machine learning algorithm, as our whole goal is to make our
+Linear Regression "learn" how to predict the price by a giving set of features.
 
 ```scala
     val data = renamedDF.select("label", "features").filter("price is not null")
