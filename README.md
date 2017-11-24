@@ -175,7 +175,7 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
 ```
 **TIP:** There are a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
-As you might guess, our dataframe still looks exactly as what we had in our database:
+Our dataframe still looks exactly as what we had in our database:
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
