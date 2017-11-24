@@ -306,7 +306,7 @@ Then we create our LinearRegression instance and **fit** our data into it.
 
 __The **lrModel** variable is already a trained model capable of predict house prices!__
 
-Before we start predicting things, let's just check some coefficients of our trained model:
+Before we start predicting things, let's just check some metrics of our trained model:
 
 ```scala
 
