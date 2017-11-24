@@ -237,7 +237,7 @@ def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
     encoder.transform(indexed)
   }
 ```
-**NOTE:** The final dataframe will not look exactly like the example shown above, the reason is that it is optimized to avoid the [The Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix ) 
+**NOTE:** The final dataframe will not look exactly like the example shown above as it is already optimized to avoid the [The Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix ) problem.
 
 
 Now we can select the fields we would like to use grouping them in a vector called **features** and renaming the column **price** to **label**:
