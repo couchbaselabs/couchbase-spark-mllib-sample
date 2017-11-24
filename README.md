@@ -207,7 +207,7 @@ Ex:
 >![Data Before Transformation](imgs/data_after_transformation.png "")
 >
 
-This is exactly what we are doing in the line bellow:
+That is exactly what we are doing in the line bellow:
 
 ```scala
 val df = transformCategoricalFeatures(houses)
