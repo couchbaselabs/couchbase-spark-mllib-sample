@@ -293,7 +293,7 @@ Then we create our LinearRegression instance and **fit** our data into it.
 
 ```
 
-The **lrModel** variable is already a trained model who is able to predict house prices!
+The **lrModel** variable is already a trained model capable of predict house prices!
 
 Before we start predicting things, let's just check some coefficients of our trained model:
 
