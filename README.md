@@ -327,7 +327,7 @@ There is only one house with a price missing in this dataset, exactly the one th
     missingPriceData.show()
 ```
 
-And now we can finally predict thw house price:
+And now we can finally predict the expected house price:
 
 ```scala
     //printing out the predicted values
