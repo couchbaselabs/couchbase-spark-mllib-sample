@@ -199,12 +199,16 @@ as it seems to be a relevant field to predict the price of a house, we have to c
 fairly simple processes:
 
 1. First we distinct the values of the target column. 
+
 **Ex:** `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
+
 2. For each result we convert it to a columns. 
+
 **Ex:** zipcode_98002, zipcode_98188, zipcode_98059
+
 3. Finally we update those new columns with 1s and 0s according to the value of the zipcode content:
 
-Ex:
+**Ex:**
 
 >![Data Before Transformation](imgs/data_before_transformation.png "")
 >
