@@ -1,27 +1,19 @@
 Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
-In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, 
-you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. 
-Surprisingly I still notice many industries being skeptical about it and others which think it is "cool" but does not have anything 
-in mind yet.
+In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. Surprisingly I still notice many industries being skeptical about it and others which think it is "cool" but does not have anything in mind yet.
 
-The reason for such dissonance I believe is due to 2 main factors: Many companies have no idea how AI fits in their business and
-because for most of the developers, it still sounds like black magic.
+The reason for such dissonance I believe is due to 2 main factors: Many companies have no idea how AI fits in their business and because for most of the developers, it still sounds like black magic.
 
 That is why I would like to show you today how you can start with machine learning with almost zero effort.
 
-On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
-that tries to "explain" a number by giving weight to a set of features, let's see some examples:
+On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm that tries to "explain" a number by giving weight to a set of features, let's see some examples:
 
 * The price of a house could be explained by things like size, location, number of bedrooms and bathrooms;
 * The price of a car could be explained by its model, year, mileage, condition, etc;
 * The time spent for a given task could be predicted by the number of subtasks, level of difficulty, worker experience, etc;
 
-
-There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
-one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are an old company,
-there is some data record of which were the houses sold in the past and for how much. 
+There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first one related to house prices. Imagine we are running a real estate company in a particular region of the country, as we are an old company, there is some data record of where the houses were sold in the past and for how much.
 
 In this case, each row in our historical data will look like this:
 
@@ -82,9 +74,7 @@ Now imagine you just joined the company and you have to sell the following house
 ```
 **For how much would you sell it?**
 
-The question above would be very challenging if you never sold a similar house in the past. Luckily now you have the right 
-tool for the job: A Linear Regression.
-
+The question above would be very challenging if you never sold a similar house in the past. Luckily now you have the right tool for the job: A Linear Regression.
 
 ## The Answer - Predicting house prices with Linear Regression
 
@@ -96,19 +86,17 @@ Before you go further, you will need to install the following items:
 
 ### Loading the Dataset
 
-With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket called
-**houses_prices**
+With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket called **houses_prices**
 
 ![bucket creation](imgs/bucket_creation.png "houses_prices bucket creation")
 
-
 Now let's clone our tutorial code:
+
 ```
 git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git
 ```
 
-In root folder there is a file called **house_prices_train_data.zip**, it is our dataset which I borrowed from an old machine 
-learning course on [Coursera](https://www.coursera.org/learn/ml-foundations/). Please unzip it and then run the following command:
+In the root folder there is a file called **house_prices_train_data.zip**, and it is our dataset which I borrowed from an old machine learning course on [Coursera](https://www.coursera.org/learn/ml-foundations/). Please unzip it and then run the following command:
 
 ```
 ./cbimport json -c couchbase://127.0.0.1 -u YOUR_USER -p YOUR_PASSWORD -b houses_prices -d <PATH_TO_UNZIPED_FILE>/house_prices_train_data -f list -g key::%id% -t 4`
@@ -116,12 +104,12 @@ learning course on [Coursera](https://www.coursera.org/learn/ml-foundations/). P
 
 **TIP:** If you are not familiar with **cbimport** please [check this tutorial](https://developer.couchbase.com/documentation/server/current/tools/cbimport.html)
 
-
 If your command ran successfully, you should notice that your **houses_prices** bucket has been populated:
 
 ![Index creation](imgs/filled_bucket.png "The houses_prices bucket has been populated.")
 
 Let's also quickly add a primary index for it:
+
 ```
 CREATE PRIMARY INDEX ON `houses_prices`
 ```
@@ -155,13 +143,11 @@ and then we load all the data from the database:
 val houses = spark.read.couchbase()
 ```
 
-As Spark uses a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
+As Spark uses a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort.
 
-In other databases for example, you would be required to export the data to a CSV file with some specific formats, copy it to your machine, 
-load and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
+In other databases for example, you would be required to export the data to a CSV file with some specific formats, copy it to your machine, load and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
 
-In a real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even
-run some N1QL queries with it:
+In the real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even run some N1QL queries with it:
 
 ```scala
 //loading documents by its type
@@ -185,28 +171,25 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
     spark.createDataFrame(rdd, schema).show()
 
 ```
-**TIP:** There are a lot of examples of how to use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
+**TIP:** There are a lot of examples of how to use the Couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
 Our dataframe still looks exactly as what we had in our database:
+
 ```scala
 houses.show(10)
 ```
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
-There are two different types of data here, "scalar numbers" such as **bathrooms** and **sqft_living** and "categorical variables" 
-such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple numbers, they have a much more 
-deep meaning as they are describing a property, in the zipcode case, for example, it represents the location of the house.
+There are two different types of data here, "scalar numbers" such as **bathrooms** and **sqft_living** and "categorical variables" such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple numbers, they have a much more deep meaning as they are describing a property, in the zipcode case, for example, it represents the location of the house.
 
-Linear Regression does not like that kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
-as it seems to be a relevant field to predict the price of a house, we have to convert it to a **dummy variable**, which is 
-fairly simple processes:
+Linear Regression does not like that kind of categorical variables, so if we really want to use zipcode in our Linear Regression, as it seems to be a relevant field to predict the price of a house, we have to convert it to a **dummy variable**, which is a fairly simple processes:
 
-1. Distinct all values of the target column. 
+1. Distinct all values of the target column.
 
 **Ex:** `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
 
-2. Convert each row into a column. 
+2. Convert each row into a column.
 
 **Ex:** zipcode_98002, zipcode_98188, zipcode_98059
 
@@ -255,8 +238,7 @@ def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
 ```
 **NOTE:** The final dataframe will not look exactly like the example shown above as it is already optimized to avoid the [The Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix ) problem.
 
-
-Now we can select the fields we would like to use grouping them in a vector called **features** and renaming the column **price** to **label**:
+Now we can select the fields we would like to use, grouping them in a vector called **features** and renaming the column **price** to **label**:
 
 ```scala
 //just using almost all columns as features, no special feature engineering here
@@ -276,20 +258,16 @@ Now we can select the fields we would like to use grouping them in a vector call
     val renamedDF = assembler.transform(df.withColumnRenamed("price", "label"))
 ```
 
-You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature
-to see how the algorithm has a much worse performance.
+You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature to see how the algorithm has a much worse performance.
 
-Finally, we will only use houses in which the price is not null to train our machine learning algorithm, as our whole goal is to make our
-Linear Regression "learn" how to predict the price by a giving set of features.
+Finally, we will only use houses in which the price is not null to train our machine learning algorithm, as our whole goal is to make our Linear Regression "learn" how to predict the price by a giving set of features.
 
 ```scala
     val data = renamedDF.select("label", "features").filter("price is not null")
 ```    
- 
-Here is where the magic happens, we split our data into training (80%) and test (20%), but for the purpose of this article let's
-ignore the test data. 
-Then we create our LinearRegression instance and **fit** our data into it.
- 
+
+Here is where the magic happens, we split our data into training (80%) and test (20%), but for the purpose of this article let's ignore the test data. Then we create our LinearRegression instance and **fit** our data into it.
+
 ```scala
 
 //let's split our data into test and training (a common thing during model selection)
@@ -308,7 +286,7 @@ Then we create our LinearRegression instance and **fit** our data into it.
 
 ```
 
-__The **lrModel** variable is already a trained model capable of predict house prices!__
+__The **lrModel** variable is already a trained model capable of predicting house prices!__
 
 Before we start predicting things, let's just check some metrics of our trained model:
 
@@ -324,17 +302,18 @@ Before we start predicting things, let's just check some metrics of our trained 
 
 ```
 
-The one that you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the
-average deviation of __what our model predicts X the actual price sold__.
+The one that you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the average deviation of __what our model predicts X the actual price sold__.
+
 >
 >RMSE: 147556.0841305963
 >
 >r2: 0.8362288980410875
 >
-On average we miss the actual price by $147556.0841305963, which is not bad at all considering we barely did any [feature engineering](https://en.wikipedia.org/wiki/Feature_engineering) or
-removed any outliers (some houses might have inexplicable high or low prices, and it might mess up with your Linear Regression)
+
+On average we miss the actual price by $147556.0841305963, which is not bad at all considering we barely did any [feature engineering](https://en.wikipedia.org/wiki/Feature_engineering) or removed any outliers (some houses might have inexplicable high or low prices, and it might mess up with your Linear Regression)
 
 There is only one house with a price missing in this dataset, exactly the one that we pointed in the beginning:
+
 ```scala
 
     val missingPriceData = renamedDF.select("features")
@@ -355,10 +334,9 @@ And now we can finally predict the expected house price:
 
 Awesome, isn't it?
 
-For production purpose, you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first, 
-check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less 
+For production purposes, you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first,
+check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less
 than 100 lines of code!
 
-
-If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on 
+If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on
 our [forum](https://forums.couchbase.com).
