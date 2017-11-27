@@ -7,6 +7,8 @@ the masses, surprisingly a lot of companies are still not doing anything in this
 of knowledge of how it fits in their business and also because for most of the developers, it still sounds like black magic,
 that is why I would like show you today how you can start with machine learning with almost zero effort.
 
+ > I think that teaser is overly enthusiastic about whats coming (as in you are teasing someone to learn them ML while you are showing them how they can take their spark stuff and connect it with couchbase. Enthusiastic is great, maybe just more focus on the DB side of things.
+
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
 
@@ -14,6 +16,7 @@ that tries to "explain" a number by giving weight to a set of features, let's se
 * The price of a car could be explained by its model, year, mileage, condition, etc;
 * The time spent for a given task could be predicted by the number of subtasks, level of difficulty, worker experience, etc;
 
+ > maybe also mention that the input is directly connected and affects the output of LR
 
 There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
 one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are 
@@ -183,6 +186,8 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
 ```
 **TIP:** There are a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
+ > this example is confusing since you are switching from houses to the travel sample without explanation. I think an example based off of the just imported data makes more sense in the read flow
+
 Our dataframe still looks exactly as what we had in our database:
 ```scala
 houses.show(10)
@@ -194,7 +199,11 @@ There are 2 different types of data here, "scalar numbers" such as **bathrooms**
 such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple numbers, they have a much more 
 deep meaning as they are describing a property, in the zipcode case for example, it represents the location of the house.
 
-Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
+Linear Regression does not like those kind of categorical variables,
+ 
+ > I think this needs a quick explanation why?
+
+so if we really want to use zipcode in our Linear Regression, 
 as it seems to be a relevant field to predict the price of a house, we have to convert it to q **dummy variable**, which is 
 fairly simple processes:
 
@@ -355,6 +364,8 @@ For production purpose you would still do some [model selection](https://en.wiki
 
 
 If you have any questions, feel free to ask me.
+
+ > maybe "reach out in the comments or the forums" or so
 
 
 
