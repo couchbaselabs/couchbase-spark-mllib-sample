@@ -1,7 +1,8 @@
 Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
-In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. 
+In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, 
+you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. 
 Surprisingly I still notice many industries being skeptical about it and others which think it is "cool" but does not have anything 
 in mind yet.
 
@@ -19,7 +20,8 @@ that tries to "explain" a number by giving weight to a set of features, let's se
 
 
 There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
-one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are an old company, we do have some data of which were the houses sold in the past and for how much. 
+one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are an old company,
+there is some data record of which were the houses sold in the past and for how much. 
 
 In this case, each row in our historical data will look like this:
 
@@ -129,7 +131,7 @@ CREATE PRIMARY INDEX ON `houses_prices`
 
 ### Time to Code!
 
-Now our environment is ready and it is time to code!
+Now our environment is ready, it is time to code!
 
 In the [LinearRegressionExample](https://github.com/couchbaselabs/couchbase-spark-mllib-sample/blob/master/src/main/scala/LinearRegressionExample.scala) class we start by creating the Spark context with our bucket credentials:
 
@@ -155,7 +157,7 @@ val houses = spark.read.couchbase()
 
 As Spark uses a lazy approach, the data is not loaded until it is really needed. You can clearly see the beauty of the **Couchbase Connector** above, we just converted a JSON Document into a Spark Dataframe with zero effort. 
 
-In other databases for example, you would be required to export the data to a csv file with some specific formats, copy it to your machine, 
+In other databases for example, you would be required to export the data to a CSV file with some specific formats, copy it to your machine, 
 load and do all the boring procedures to convert it to a dataframe (not to mention the cases where the file generated is too big).
 
 In a real world you would need to do some filtering instead of just grabbing all data, again our connector is there for you, as you can even
@@ -183,7 +185,7 @@ val airlines = spark.read.couchbase(EqualTo("type", "airline"))
     spark.createDataFrame(rdd, schema).show()
 
 ```
-**TIP:** There are a lot of examples of how use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
+**TIP:** There are a lot of examples of how to use couchbase connector [here](https://github.com/couchbaselabs/couchbase-spark-samples/tree/master/src/main/scala)
 
 Our dataframe still looks exactly as what we had in our database:
 ```scala
@@ -192,11 +194,11 @@ houses.show(10)
 
 ![Loaded Data](imgs/dataframe_data.png "Loaded dataframe data sample")
 
-There are 2 different types of data here, "scalar numbers" such as **bathrooms** and **sqft_living** and "categorical variables" 
+There are two different types of data here, "scalar numbers" such as **bathrooms** and **sqft_living** and "categorical variables" 
 such as **zipcode** and **yr_renovated**. Those categorical variables are not just simple numbers, they have a much more 
-deep meaning as they are describing a property, in the zipcode case for example, it represents the location of the house.
+deep meaning as they are describing a property, in the zipcode case, for example, it represents the location of the house.
 
-Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
+Linear Regression does not like that kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
 as it seems to be a relevant field to predict the price of a house, we have to convert it to a **dummy variable**, which is 
 fairly simple processes:
 
@@ -220,13 +222,13 @@ fairly simple processes:
 >![Data Before Transformation](imgs/data_after_transformation.png "")
 >
 
-That is exactly what we are doing in the line bellow:
+That is what we are doing on the line bellow:
 
 ```scala
 val df = transformCategoricalFeatures(houses)
 ```
 
-Converting categorical variables is a very common procedure and Spark already has some utilities to do this work for you:
+Converting categorical variables is a very standard procedure and Spark already has some utilities to do this work for you:
 
 ```scala
 def transformCategoricalFeatures(dataset: Dataset[_]): DataFrame = {
