@@ -1,11 +1,14 @@
 Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
+In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. 
+Surprisingly I still notice many industries being skeptical about it and others which think it is "cool" but does not have anything 
+in mind yet.
 
-In the last few years, we have witnessed the rise of Machine Learning, a 50+ years old technique that has finally reached 
-the masses, surprisingly a lot of companies are still not doing anything in this field, in part I believe due to the lack 
-of knowledge of how it fits in their business and also because for most of the developers, it still sounds like black magic,
-that is why I would like show you today how you can start with machine learning with almost zero effort.
+The reason for such dissonance I believe is due to 2 main factors: Many companies have no idea how AI fits in their business and
+because for most of the developers, it still sounds like black magic.
+
+That is why I would like to show you today how you can start with machine learning with almost zero effort.
 
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
@@ -16,8 +19,7 @@ that tries to "explain" a number by giving weight to a set of features, let's se
 
 
 There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
-one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are 
-not a new company, we do have some data of which were the houses sold in the past and for how much. 
+one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are an old company, we do have some data of which were the houses sold in the past and for how much. 
 
 In this case, each row in our historical data will look like this:
 
@@ -78,7 +80,8 @@ Now imagine you just joined the company and you have to sell the following house
 ```
 **For how much would you sell it?**
 
-Though question, right? Luckily, that is exactly the question Linear Regression would help you to answer.
+The question above would be very challenging if you never sold a similar house in the past. Luckily now you have the right 
+tool for the job: A Linear Regression.
 
 
 ## The Answer - Predicting house prices with Linear Regression
@@ -103,7 +106,7 @@ git clone https://github.com/couchbaselabs/couchbase-spark-mllib-sample.git
 ```
 
 In root folder there is a file called **house_prices_train_data.zip**, it is our dataset which I borrowed from an old machine 
-learning course on Coursera. Please unzip it and then run the following command:
+learning course on [Coursera](https://www.coursera.org/learn/ml-foundations/). Please unzip it and then run the following command:
 
 ```
 ./cbimport json -c couchbase://127.0.0.1 -u YOUR_USER -p YOUR_PASSWORD -b houses_prices -d <PATH_TO_UNZIPED_FILE>/house_prices_train_data -f list -g key::%id% -t 4`
@@ -116,8 +119,7 @@ If your command ran successfully, you should notice that your **houses_prices** 
 
 ![Index creation](imgs/filled_bucket.png "The houses_prices bucket has been populated.")
 
-For the sake of letting you explore this data let's quickly create an index for it, run the following command in the query editor:
-
+Let's also quickly add primary index for it:
 ```
 CREATE PRIMARY INDEX ON `houses_prices`
 ```
@@ -354,10 +356,4 @@ Awesome, isn't it?
 For production purpose you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first, check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less than 100 lines of code!
 
 
-If you have any questions, feel free to ask me.
-
-
-
-
-
-
+If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on our [forum](https://forums.couchbase.com).
