@@ -210,7 +210,7 @@ fairly simple processes:
 
 **Ex:** zipcode_98002, zipcode_98188, zipcode_98059
 
-3. Finally we update those new columns with 1s and 0s according to the value of the zipcode content:
+3. Update those new columns with 1s and 0s according to the value of the zipcode content:
 
 **Ex:**
 
@@ -279,20 +279,20 @@ Now we can select the fields we would like to use grouping them in a vector call
 You can play around with those features removing/adding them as you wish, later you can try for example remove the "sqft_living" feature
 to see how the algorithm has a much worse performance.
 
-Finally we will only use houses in which the price is not null to train our machine learning algorithm, as our whole goal is to make our
+Finally, we will only use houses in which the price is not null to train our machine learning algorithm, as our whole goal is to make our
 Linear Regression "learn" how to predict the price by a giving set of features.
 
 ```scala
     val data = renamedDF.select("label", "features").filter("price is not null")
 ```    
  
-Here is where the magic happens, we split our data in training (80%) and test (20%), but for the purpose of this article let's
+Here is where the magic happens, we split our data into training (80%) and test (20%), but for the purpose of this article let's
 ignore the test data. 
 Then we create our LinearRegression instance and **fit** our data into it.
  
 ```scala
 
-//let's split our data in test and training (a common thing during model selection)
+//let's split our data into test and training (a common thing during model selection)
     val splits = data.randomSplit(Array(0.8, 0.2), seed = 1L)
     val trainingData = splits(0).cache()
     //let's ignore the test data for now as we are not doing model selection
@@ -325,7 +325,7 @@ Before we start predicting things, let's just check some metrics of our trained 
 ```
 
 The one that you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the
-average deviation of __what our model preditcs X the actual price sold__.
+average deviation of __what our model predicts X the actual price sold__.
 >
 >RMSE: 147556.0841305963
 >
@@ -355,7 +355,10 @@ And now we can finally predict the expected house price:
 
 Awesome, isn't it?
 
-For production purpose you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first, check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less than 100 lines of code!
+For production purpose, you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first, 
+check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less 
+than 100 lines of code!
 
 
-If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on our [forum](https://forums.couchbase.com).
+If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on 
+our [forum](https://forums.couchbase.com).
