@@ -119,7 +119,7 @@ If your command ran successfully, you should notice that your **houses_prices** 
 
 ![Index creation](imgs/filled_bucket.png "The houses_prices bucket has been populated.")
 
-Let's also quickly add primary index for it:
+Let's also quickly add a primary index for it:
 ```
 CREATE PRIMARY INDEX ON `houses_prices`
 ```
@@ -197,14 +197,14 @@ such as **zipcode** and **yr_renovated**. Those categorical variables are not ju
 deep meaning as they are describing a property, in the zipcode case for example, it represents the location of the house.
 
 Linear Regression does not like those kind of categorical variables, so if we really want to use zipcode in our Linear Regression, 
-as it seems to be a relevant field to predict the price of a house, we have to convert it to q **dummy variable**, which is 
+as it seems to be a relevant field to predict the price of a house, we have to convert it to a **dummy variable**, which is 
 fairly simple processes:
 
-1. First we distinct the values of the target column. 
+1. Distinct all values of the target column. 
 
 **Ex:** `SELECT DISTINCT(ZIPCODE) FROM HOUSES_PRICES`
 
-2. For each result we convert it to a columns. 
+2. Convert each row into a column. 
 
 **Ex:** zipcode_98002, zipcode_98188, zipcode_98059
 
