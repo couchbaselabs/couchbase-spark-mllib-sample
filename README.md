@@ -1,27 +1,27 @@
 Zero Effort Machine Learning with Couchbase and Spark MLlib
 =======================
 
-In the last few years, we noticed how machine learning has been proven to be a technology in which companies should invest massively, 
+The last few years, we noticed how machine learning had been proven to be a technology in which companies should invest massively and 
 you can easily find dozens of papers talking about how company X saved tons of money by adding some level of AI into their process. 
 Surprisingly I still notice many industries being skeptical about it and others which think it is "cool" but does not have anything 
 in mind yet.
 
-The reason for such dissonance I believe is due to 2 main factors: Many companies have no idea how AI fits in their business and
-because for most of the developers, it still sounds like black magic.
+I believe the reason for such dissonance is due to 2 main factors: Many companies have no idea how AI fits in their business and
+for most of the developers, it still sounds like black magic.
 
 That is why I would like to show you today how you can start with machine learning with almost zero effort.
 
 On the most basic level of machine learning, we have something called Linear Regression which is roughly an algorithm 
 that tries to "explain" a number by giving weight to a set of features, let's see some examples:
 
-* The price of a house could be explained by things like size, location, number of bedrooms and bathrooms;
-* The price of a car could be explained by its model, year, mileage, condition, etc;
-* The time spent for a given task could be predicted by the number of subtasks, level of difficulty, worker experience, etc;
+* The price of a house could be explained by things like size, location, number of bedrooms and bathrooms.
+* The price of a car could be explained by its model, year, mileage, condition, etc.
+* The time spent for a given task could be predicted by the number of subtasks, level of difficulty, worker experience, etc.
 
 
 There a plenty of use cases were Linear Regression (or other Regression types) can be used, but let's focus on the first
-one related to house prices. Imagine we a running a real estate company in a particular region of the country, as we are an old company,
-there is some data record of which were the houses sold in the past and for how much. 
+one related to house prices. Imagine we are running a real estate company in a particular region of the country, as we are an old company,
+there is some data record of which were the houses were sold in the past and for how much. 
 
 In this case, each row in our historical data will look like this:
 
