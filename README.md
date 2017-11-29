@@ -332,9 +332,9 @@ average deviation of __what our model predicts X the actual price sold__.
 >r2: 0.8362288980410875
 >
 On average we miss the actual price by $147556.0841305963, which is not bad at all considering we barely did any [feature engineering](https://en.wikipedia.org/wiki/Feature_engineering) or
-removed any outliers (some houses might have inexplicable high or low prices, and it might mess up with your Linear Regression)
+removed any outliers (some houses might have inexplicable high or low prices and it might mess up with your Linear Regression)
 
-There is only one house with a price missing in this dataset, exactly the one that we pointed in the beginning:
+There is only one house with a missing price in this dataset, exactly the one that we pointed in the beginning:
 ```scala
 
     val missingPriceData = renamedDF.select("features")
@@ -355,10 +355,10 @@ And now we can finally predict the expected house price:
 
 Awesome, isn't it?
 
-For production purpose, you would still do some [model selection](https://en.wikipedia.org/wiki/Model_selection) first, 
-check other metrics, and save the model instead of training it on the fly, but it's amazing how much can be done with less 
+For production purpose, you would still need to do a [model selection](https://en.wikipedia.org/wiki/Model_selection) first, 
+check other metrics of your regression and save the model instead of training it on the fly, but it's amazing how much can be done with less 
 than 100 lines of code!
 
 
-If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or ask on 
-our [forum](https://forums.couchbase.com).
+If you have any questions, feel free to ask me on twitter at [@deniswsrosa](https://twitter.com/deniswsrosa) or on 
+our [forums](https://forums.couchbase.com).
