@@ -96,8 +96,8 @@ Before you go further, you will need to install the following items:
 
 ### Loading the Dataset
 
-With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket called
-**houses_prices**
+With your Couchbase Server running, go to the administrative portal at http://127.0.0.1:8091 and create a new bucket 
+called **houses_prices**
 
 ![bucket creation](imgs/bucket_creation.png "houses_prices bucket creation")
 
