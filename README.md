@@ -324,7 +324,7 @@ Before we start predicting things, let's just check some metrics of our trained 
 
 ```
 
-The one that you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the
+The one you should care here is called [RMSE - Root Mean Squared Error](https://en.wikipedia.org/wiki/Root-mean-square_deviation) which roughly is the
 average deviation of __what our model predicts X the actual price sold__.
 >
 >RMSE: 147556.0841305963
