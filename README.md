@@ -53,7 +53,7 @@ In this case, each row in our historical data will look like this:
 
 ## The problem - How to price a house
 
-Now imagine you just joined the company and you have to sell the following house:
+Now, imagine you just joined the company and you have to sell the following house:
 
 ```javascript
   {       
